@@ -14,6 +14,8 @@ import {
 
 import { db } from "./firebase/firebase";
 
+import AdminUpload from "./pages/AdminUpload";
+
 import "./index.css";
 
 function Navbar() {
@@ -334,6 +336,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route
           path="/contact"
           element={<Contact />}
+        />
+
+        <Route
+          path="/admin"
+          element={<AdminUpload />}
         />
 
       </Routes>
