@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import {
   BrowserRouter,
@@ -6,6 +6,13 @@ import {
   Route,
   Link,
 } from "react-router-dom";
+
+import {
+  collection,
+  getDocs,
+} from "firebase/firestore";
+
+import { db } from "./firebase/firebase";
 
 import "./index.css";
 
@@ -125,7 +132,7 @@ function ProductCard({ image, title, price }) {
         </p>
 
         <a
-          href="https://wa.me/918873772587"
+          href={`https://wa.me/918873772587?text=Hi,%20I%20want%20to%20buy%20${title}`}
           target="_blank"
           className="inline-block mt-6 w-full text-center bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition"
         >
@@ -138,6 +145,29 @@ function ProductCard({ image, title, price }) {
 }
 
 function Home() {
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+
+    const fetchProducts = async () => {
+
+      const querySnapshot = await getDocs(
+        collection(db, "products")
+      );
+
+      const productsArray = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setProducts(productsArray);
+    };
+
+    fetchProducts();
+
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -151,23 +181,16 @@ function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
 
-          <ProductCard
-            image="https://images.unsplash.com/photo-1496181133206-80ce9b88a853"
-            title="Laptop"
-            price="₹18,000"
-          />
+          {products.map((product) => (
 
-          <ProductCard
-            image="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
-            title="Smartphone"
-            price="₹9,999"
-          />
+            <ProductCard
+              key={product.id}
+              image={product.image}
+              title={product.name}
+              price={`₹${product.price}`}
+            />
 
-          <ProductCard
-            image="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf"
-            title="Monitor"
-            price="₹7,500"
-          />
+          ))}
 
         </div>
       </section>
@@ -186,6 +209,29 @@ function Home() {
 }
 
 function Products() {
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+
+    const fetchProducts = async () => {
+
+      const querySnapshot = await getDocs(
+        collection(db, "products")
+      );
+
+      const productsArray = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setProducts(productsArray);
+    };
+
+    fetchProducts();
+
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -198,25 +244,19 @@ function Products() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
 
-          <ProductCard
-            image="https://images.unsplash.com/photo-1496181133206-80ce9b88a853"
-            title="Laptop"
-            price="₹18,000"
-          />
+          {products.map((product) => (
 
-          <ProductCard
-            image="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
-            title="Smartphone"
-            price="₹9,999"
-          />
+            <ProductCard
+              key={product.id}
+              image={product.image}
+              title={product.name}
+              price={`₹${product.price}`}
+            />
 
-          <ProductCard
-            image="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf"
-            title="Monitor"
-            price="₹7,500"
-          />
+          ))}
 
         </div>
+
       </section>
     </div>
   );
@@ -273,6 +313,7 @@ function Contact() {
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
+
       <Routes>
 
         <Route
@@ -296,6 +337,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         />
 
       </Routes>
+
     </BrowserRouter>
   </React.StrictMode>
 );
