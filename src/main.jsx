@@ -1,3 +1,4 @@
+import Cart from "./pages/Cart";
 import {
   CartProvider,
 } from "./context/CartContext";
@@ -387,6 +388,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
     <BrowserRouter>
       <Routes>
+        <Route
+  path="/cart"
+  element={<Cart />}
+/>
 
         <Route
           path="/"
