@@ -12,149 +12,306 @@ import {
 import { db } from "../firebase/firebase";
 
 function AdminUpload() {
+
   const [products, setProducts] = useState([]);
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
+  const [description, setDescription] =
+    useState("");
 
-  const [editingId, setEditingId] = useState(null);
+  const [image, setImage] = useState(null);
 
-  const productsCollection = collection(db, "products");
+  const [loading, setLoading] = useState(false);
+
+  const [editingId, setEditingId] =
+    useState(null);
+
+  const productsCollection = collection(
+    db,
+    "products"
+  );
 
   // FETCH PRODUCTS
-  const fetchProducts = async () => {
-    const data = await getDocs(productsCollection);
 
-    const filteredData = data.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
+  const fetchProducts = async () => {
+
+    const data = await getDocs(
+      productsCollection
+    );
+
+    const filteredData = data.docs.map(
+      (doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      })
+    );
 
     setProducts(filteredData);
+
   };
 
   useEffect(() => {
+
     fetchProducts();
+
   }, []);
 
+  // IMAGE UPLOAD TO CLOUDINARY
+
+  const uploadImage = async () => {
+
+    const formData = new FormData();
+
+    formData.append("file", image);
+
+    formData.append(
+      "upload_preset",
+      "retech_uploads"
+    );
+
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/dwf9gjyjl/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+
+    return data.secure_url;
+
+  };
+
   // ADD PRODUCT
+
   const addProduct = async (e) => {
+
     e.preventDefault();
 
-    if (!name || !price || !image) {
+    if (
+      !name ||
+      !price ||
+      !description ||
+      !image
+    ) {
       alert("Fill all fields");
       return;
     }
 
-    await addDoc(productsCollection, {
-      name,
-      price,
-      image,
-    });
+    try {
 
-    setName("");
-    setPrice("");
-    setImage("");
+      setLoading(true);
 
-    fetchProducts();
+      const imageUrl =
+        await uploadImage();
 
-    alert("Product Added");
+      await addDoc(productsCollection, {
+        name,
+        price,
+        description,
+        image: imageUrl,
+      });
+
+      setName("");
+      setPrice("");
+      setDescription("");
+      setImage(null);
+
+      fetchProducts();
+
+      alert("Product Uploaded");
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Upload Failed");
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
   };
 
   // DELETE PRODUCT
+
   const deleteProduct = async (id) => {
-    await deleteDoc(doc(db, "products", id));
+
+    const confirmDelete =
+      window.confirm(
+        "Delete this product?"
+      );
+
+    if (!confirmDelete) return;
+
+    await deleteDoc(
+      doc(db, "products", id)
+    );
 
     fetchProducts();
 
     alert("Product Deleted");
+
   };
 
-  // EDIT PRODUCT
+  // EDIT BUTTON
+
   const editProduct = (product) => {
+
     setEditingId(product.id);
 
     setName(product.name);
+
     setPrice(product.price);
-    setImage(product.image);
+
+    setDescription(product.description);
+
   };
 
   // UPDATE PRODUCT
+
   const updateProduct = async (e) => {
+
     e.preventDefault();
 
-    const productDoc = doc(db, "products", editingId);
+    try {
 
-    await updateDoc(productDoc, {
-      name,
-      price,
-      image,
-    });
+      let imageUrl = null;
 
-    setEditingId(null);
+      if (image) {
 
-    setName("");
-    setPrice("");
-    setImage("");
+        imageUrl =
+          await uploadImage();
 
-    fetchProducts();
+      }
 
-    alert("Product Updated");
+      const productDoc = doc(
+        db,
+        "products",
+        editingId
+      );
+
+      await updateDoc(productDoc, {
+        name,
+        price,
+        description,
+        ...(imageUrl && {
+          image: imageUrl,
+        }),
+      });
+
+      setEditingId(null);
+
+      setName("");
+      setPrice("");
+      setDescription("");
+      setImage(null);
+
+      fetchProducts();
+
+      alert("Product Updated");
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert("Update Failed");
+
+    }
+
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10">
+    <div className="min-h-screen bg-gray-100 px-6 py-12">
 
-      <h1 className="text-5xl font-extrabold text-center mb-10 text-green-600">
-        Admin Dashboard
-      </h1>
+      <div className="max-w-3xl mx-auto bg-white p-10 rounded-3xl shadow-xl">
 
-      {/* FORM */}
+        <h1 className="text-5xl font-extrabold text-center text-green-600 mb-10">
+          Admin Dashboard
+        </h1>
 
-      <form
-        onSubmit={editingId ? updateProduct : addProduct}
-        className="bg-white p-8 rounded-3xl shadow-xl max-w-2xl mx-auto"
-      >
-
-        <h2 className="text-3xl font-bold mb-8 text-gray-800">
-
-          {editingId ? "Edit Product" : "Add Product"}
-
-        </h2>
-
-        <input
-          type="text"
-          placeholder="Product Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full border p-4 rounded-xl mb-5"
-        />
-
-        <input
-          type="text"
-          placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          className="w-full border p-4 rounded-xl mb-5"
-        />
-
-        <input
-          type="text"
-          placeholder="Image URL"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          className="w-full border p-4 rounded-xl mb-5"
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl text-xl font-bold transition"
+        <form
+          onSubmit={
+            editingId
+              ? updateProduct
+              : addProduct
+          }
+          className="space-y-6"
         >
-          {editingId ? "Update Product" : "Upload Product"}
-        </button>
 
-      </form>
+          <input
+            type="text"
+            placeholder="Product Name"
+            value={name}
+            onChange={(e) =>
+              setName(e.target.value)
+            }
+            className="w-full p-4 border rounded-2xl"
+          />
+
+          <input
+            type="text"
+            placeholder="Price"
+            value={price}
+            onChange={(e) =>
+              setPrice(e.target.value)
+            }
+            className="w-full p-4 border rounded-2xl"
+          />
+
+          <textarea
+            placeholder="Description"
+            value={description}
+            onChange={(e) =>
+              setDescription(
+                e.target.value
+              )
+            }
+            className="w-full p-4 border rounded-2xl h-40"
+          />
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              setImage(
+                e.target.files[0]
+              )
+            }
+            className="w-full"
+          />
+
+          {image && (
+            <img
+              src={URL.createObjectURL(
+                image
+              )}
+              alt="preview"
+              className="w-full h-64 object-cover rounded-2xl"
+            />
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl text-xl font-bold transition"
+          >
+
+            {loading
+              ? "Please Wait..."
+              : editingId
+              ? "Update Product"
+              : "Upload Product"}
+
+          </button>
+
+        </form>
+
+      </div>
 
       {/* PRODUCTS */}
 
@@ -170,7 +327,7 @@ function AdminUpload() {
 
             <div
               key={product.id}
-              className="bg-white rounded-3xl overflow-hidden shadow-xl"
+              className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition"
             >
 
               <img
@@ -185,21 +342,31 @@ function AdminUpload() {
                   {product.name}
                 </h3>
 
-                <p className="text-3xl font-extrabold text-green-600 mt-3">
+                <p className="mt-3 text-gray-600">
+                  {product.description}
+                </p>
+
+                <p className="mt-4 text-4xl font-extrabold text-green-600">
                   ₹{product.price}
                 </p>
 
-                <div className="flex gap-4 mt-6">
+                <div className="flex gap-4 mt-8">
 
                   <button
-                    onClick={() => editProduct(product)}
+                    onClick={() =>
+                      editProduct(product)
+                    }
                     className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold"
                   >
                     Edit
                   </button>
 
                   <button
-                    onClick={() => deleteProduct(product.id)}
+                    onClick={() =>
+                      deleteProduct(
+                        product.id
+                      )
+                    }
                     className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold"
                   >
                     Delete
