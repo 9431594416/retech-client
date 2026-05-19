@@ -1,3 +1,6 @@
+import {
+  CartProvider,
+} from "./context/CartContext";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import {
@@ -379,8 +382,10 @@ function Contact() {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
 
+  <CartProvider>
+
+    <BrowserRouter>
       <Routes>
 
         <Route
@@ -411,5 +416,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       </Routes>
 
     </BrowserRouter>
-  </React.StrictMode>
+
+  </CartProvider>
+
+</React.StrictMode>
 );
