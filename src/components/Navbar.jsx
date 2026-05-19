@@ -47,13 +47,6 @@ function Navbar() {
             Contact
           </Link>
 
-          <Link
-            to="/admin"
-            className="bg-green-600 text-white px-5 py-2 rounded-xl hover:bg-green-700 transition"
-          >
-            Admin
-          </Link>
-
         </div>
 
       </div>
