@@ -1,3 +1,4 @@
+import { useCart } from "./context/CartContext";
 import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
 import {
@@ -72,17 +73,32 @@ function Hero() {
   );
 }
 
-function ProductCard({ image, title, price }) {
+function ProductCard({
+  id,
+  image,
+  title,
+  price,
+  description,
+}) {
+
+  const { addToCart } = useCart();
+
   return (
     <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl hover:-translate-y-2 transition duration-300">
 
+      {/* IMAGE */}
+
       <div className="overflow-hidden">
+
         <img
           src={image}
           alt={title}
           className="w-full h-64 object-cover hover:scale-110 transition duration-500"
         />
+
       </div>
+
+      {/* CONTENT */}
 
       <div className="p-6">
 
@@ -90,19 +106,56 @@ function ProductCard({ image, title, price }) {
           {title}
         </h3>
 
-        <p className="text-4xl font-extrabold text-green-600 mt-4">
-          {price}
+        {/* DESCRIPTION */}
+
+        <p className="mt-4 text-gray-600 leading-relaxed">
+          {description}
         </p>
+
+        {/* PRICE */}
+
+        <p className="text-4xl font-extrabold text-green-600 mt-6">
+          ₹{price}
+        </p>
+
+        {/* ADD TO CART */}
+
+        <button
+          onClick={() =>
+            addToCart({
+              id,
+              image,
+              name: title,
+              price,
+            })
+          }
+          className="w-full mt-8 bg-black hover:bg-gray-800 text-white py-4 rounded-2xl text-lg font-bold transition"
+        >
+          Add To Cart
+        </button>
+
+        {/* WHATSAPP */}
 
         <a
           href={`https://wa.me/918873772587?text=Hi,%20I%20want%20to%20buy%20${title}`}
           target="_blank"
-          className="inline-block mt-6 w-full text-center bg-black text-white py-3 rounded-xl font-bold hover:bg-gray-800 transition"
+          className="block text-center w-full mt-4 bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl text-lg font-bold transition"
         >
           Buy on WhatsApp
         </a>
 
+        {/* OFFLINE */}
+
+        <a
+          href="https://maps.google.com"
+          target="_blank"
+          className="block text-center w-full mt-4 border-2 border-black hover:bg-black hover:text-white text-black py-4 rounded-2xl text-lg font-bold transition"
+        >
+          Buy Offline
+        </a>
+
       </div>
+
     </div>
   );
 }
@@ -147,11 +200,13 @@ function Home() {
           {products.map((product) => (
 
             <ProductCard
-              key={product.id}
-              image={product.image}
-              title={product.name}
-              price={`₹${product.price}`}
-            />
+  key={product.id}
+  id={product.id}
+  image={product.image}
+  title={product.name}
+  price={product.price}
+  description={product.description}
+/>
 
           ))}
 
@@ -210,11 +265,13 @@ function Products() {
           {products.map((product) => (
 
             <ProductCard
-              key={product.id}
-              image={product.image}
-              title={product.name}
-              price={`₹${product.price}`}
-            />
+  key={product.id}
+  id={product.id}
+  image={product.image}
+  title={product.name}
+  price={product.price}
+  description={product.description}
+/>
 
           ))}
 
