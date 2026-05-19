@@ -2,64 +2,82 @@ import Navbar from "../components/Navbar";
 
 function Contact() {
   return (
-    <div>
+    <div className="bg-gray-100 min-h-screen">
 
       <Navbar />
 
-      <section className="min-h-screen bg-gray-100 px-6 py-20">
+      <section className="max-w-6xl mx-auto px-6 py-20">
 
-        <div className="max-w-4xl mx-auto bg-white p-10 rounded-3xl shadow-xl text-center">
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden grid md:grid-cols-2">
 
-          <h1 className="text-5xl font-extrabold text-green-600 mb-10">
-            Contact Us
-          </h1>
+          {/* LEFT SIDE */}
 
-          <p className="text-2xl text-gray-700 mb-6">
-            We would love to hear from you.
-          </p>
+          <div className="bg-green-600 text-white p-12 flex flex-col justify-center">
 
-          {/* PHONE */}
+            <h1 className="text-5xl font-extrabold leading-tight">
+              Contact
+              <br />
+              ReTech
+            </h1>
 
-          <div className="mt-10">
+            <p className="mt-8 text-xl text-green-100 leading-relaxed">
+              For product enquiries, refurbished electronics,
+              business deals and support, contact us directly.
+            </p>
 
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Phone Number
-            </h2>
+            <div className="mt-12 space-y-8">
 
-            <a
-              href="tel:+918873772587"
-              className="text-2xl text-green-600 font-semibold hover:underline"
-            >
-              +91 8873772587
-            </a>
+              <div>
+
+                <h2 className="text-2xl font-bold">
+                  Phone
+                </h2>
+
+                <a
+                  href="tel:+918873772587"
+                  className="text-xl text-white hover:underline"
+                >
+                  +91 8873772587
+                </a>
+
+              </div>
+
+              <div>
+
+                <h2 className="text-2xl font-bold">
+                  Email
+                </h2>
+
+                <a
+                  href="mailto:harshkumartiwary12@gmail.com"
+                  className="text-xl text-white hover:underline break-all"
+                >
+                  harshkumartiwary12@gmail.com
+                </a>
+
+              </div>
+
+            </div>
 
           </div>
 
-          {/* EMAIL */}
+          {/* RIGHT SIDE */}
 
-          <div className="mt-12">
+          <div className="p-12 flex flex-col justify-center">
 
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Email Address
+            <h2 className="text-4xl font-extrabold text-gray-800">
+              Let’s Connect
             </h2>
 
-            <a
-              href="mailto:harshkumartiwary12@gmail.com"
-              className="text-2xl text-blue-600 font-semibold hover:underline"
-            >
-              harshkumartiwary12@gmail.com
-            </a>
-
-          </div>
-
-          {/* WHATSAPP BUTTON */}
-
-          <div className="mt-14">
+            <p className="mt-6 text-gray-600 text-lg leading-relaxed">
+              Click below to directly chat on WhatsApp for
+              product availability, pricing and support.
+            </p>
 
             <a
               href="https://wa.me/918873772587"
               target="_blank"
-              className="inline-block bg-green-600 hover:bg-green-700 text-white px-10 py-4 rounded-2xl text-xl font-bold transition"
+              className="mt-10 inline-block bg-black hover:bg-gray-800 text-white text-center py-4 rounded-2xl text-xl font-bold transition"
             >
               Chat on WhatsApp
             </a>
