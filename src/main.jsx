@@ -147,12 +147,12 @@ function ProductCard({
         {/* OFFLINE */}
 
         <a
-          href="https://maps.google.com"
-          target="_blank"
-          className="block text-center w-full mt-4 border-2 border-black hover:bg-black hover:text-white text-black py-4 rounded-2xl text-lg font-bold transition"
-        >
-          Buy Offline
-        </a>
+  href="https://www.google.com/maps/search/?api=1&query=Shop+No-45+Rajendra+Market+Near+Overbridge+Nivaranpur+Main+Road+Doranda+Ranchi+834002+Jharkhand"
+  target="_blank"
+  className="block text-center w-full mt-4 border-2 border-black hover:bg-black hover:text-white text-black py-4 rounded-2xl text-lg font-bold transition"
+>
+  Buy Offline
+</a>
 
       </div>
 
