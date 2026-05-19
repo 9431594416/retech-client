@@ -1,3 +1,4 @@
+import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
 import {
   CartProvider,
@@ -22,51 +23,7 @@ import AdminUpload from "./pages/AdminUpload";
 
 import "./index.css";
 
-function Navbar() {
-  return (
-    <nav className="bg-white/90 backdrop-blur-md shadow-md px-6 md:px-12 py-5 flex justify-between items-center sticky top-0 z-50">
 
-      <Link
-        to="/"
-        className="text-4xl font-extrabold text-green-600 tracking-tight"
-      >
-        ReTech
-      </Link>
-
-      <div className="flex gap-8 text-lg font-semibold text-gray-700">
-
-        <Link
-          to="/"
-          className="hover:text-green-600 transition"
-        >
-          Home
-        </Link>
-
-        <Link
-          to="/products"
-          className="hover:text-green-600 transition"
-        >
-          Products
-        </Link>
-
-        <Link
-          to="/about"
-          className="hover:text-green-600 transition"
-        >
-          About
-        </Link>
-
-        <Link
-          to="/contact"
-          className="hover:text-green-600 transition"
-        >
-          Contact
-        </Link>
-
-      </div>
-    </nav>
-  );
-}
 
 function Hero() {
   return (
