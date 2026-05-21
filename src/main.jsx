@@ -171,6 +171,11 @@ function ProductCard({
 function Home() {
 
   const [products, setProducts] = useState([]);
+  const [search, setSearch] =
+  useState("");
+
+const [selectedCategory, setSelectedCategory] =
+  useState("All");
 
   useEffect(() => {
 
@@ -192,6 +197,29 @@ function Home() {
 
   }, []);
 
+  const filteredProducts =
+  products.filter((product) => {
+
+    const matchesSearch =
+      product.name
+        .toLowerCase()
+        .includes(
+          search.toLowerCase()
+        );
+
+    const matchesCategory =
+      selectedCategory === "All"
+        ? true
+        : product.category ===
+          selectedCategory;
+
+    return (
+      matchesSearch &&
+      matchesCategory
+    );
+
+  });
+
   return (
     <div>
       <Navbar />
@@ -203,9 +231,59 @@ function Home() {
           Featured Products
         </h2>
 
+        <div className="flex flex-col md:flex-row gap-6 mb-16">
+
+  <input
+    type="text"
+    placeholder="Search products..."
+    value={search}
+    onChange={(e) =>
+      setSearch(e.target.value)
+    }
+    className="flex-1 p-4 rounded-2xl border"
+  />
+
+  <select
+    value={selectedCategory}
+    onChange={(e) =>
+      setSelectedCategory(
+        e.target.value
+      )
+    }
+    className="p-4 rounded-2xl border"
+  >
+
+    <option value="All">
+      All Categories
+    </option>
+
+    <option value="Laptop">
+      Laptop
+    </option>
+
+    <option value="Phone">
+      Phone
+    </option>
+
+    <option value="Monitor">
+      Monitor
+    </option>
+
+    <option value="Accessories">
+      Accessories
+    </option>
+
+    <option value="Kitchen">
+      Kitchen
+    </option>
+
+  </select>
+
+</div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
 
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
 
             <ProductCard
   key={product.id}
@@ -237,6 +315,11 @@ function Home() {
 function Products() {
 
   const [products, setProducts] = useState([]);
+  const [search, setSearch] =
+  useState("");
+
+const [selectedCategory, setSelectedCategory] =
+  useState("All");
 
   useEffect(() => {
 
@@ -258,6 +341,29 @@ function Products() {
 
   }, []);
 
+  const filteredProducts =
+  products.filter((product) => {
+
+    const matchesSearch =
+      product.name
+        .toLowerCase()
+        .includes(
+          search.toLowerCase()
+        );
+
+    const matchesCategory =
+      selectedCategory === "All"
+        ? true
+        : product.category ===
+          selectedCategory;
+
+    return (
+      matchesSearch &&
+      matchesCategory
+    );
+
+  });
+
   return (
     <div>
       <Navbar />
@@ -267,10 +373,63 @@ function Products() {
         <h1 className="text-4xl md:text-6xl font-extrabold text-center mb-20 text-gray-800">
           Products
         </h1>
+        <div className="flex flex-col md:flex-row gap-6 mb-16">
+
+  {/* SEARCH */}
+
+  <input
+    type="text"
+    placeholder="Search products..."
+    value={search}
+    onChange={(e) =>
+      setSearch(e.target.value)
+    }
+    className="flex-1 p-4 rounded-2xl border"
+  />
+
+  {/* CATEGORY */}
+
+  <select
+    value={selectedCategory}
+    onChange={(e) =>
+      setSelectedCategory(
+        e.target.value
+      )
+    }
+    className="p-4 rounded-2xl border"
+  >
+
+    <option value="All">
+      All Categories
+    </option>
+
+    <option value="Laptop">
+      Laptop
+    </option>
+
+    <option value="Phone">
+      Phone
+    </option>
+
+    <option value="Monitor">
+      Monitor
+    </option>
+
+    <option value="Accessories">
+      Accessories
+    </option>
+
+    <option value="Kitchen">
+      Kitchen
+    </option>
+
+  </select>
+
+</div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
 
-          {products.map((product) => (
+         {filteredProducts.map((product)=> (
 
             <ProductCard
   key={product.id}

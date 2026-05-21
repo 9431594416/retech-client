@@ -17,6 +17,8 @@ function AdminUpload() {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] =
+  useState("");
   const [description, setDescription] =
     useState("");
 
@@ -95,6 +97,8 @@ function AdminUpload() {
     setPrice("");
     setDescription("");
 
+    setCategory("");
+
     setImage(null);
 
     setPreviewImage("");
@@ -126,12 +130,13 @@ function AdminUpload() {
       const imageUrl =
         await uploadImage();
 
-      await addDoc(productsCollection, {
-        name,
-        price,
-        description,
-        image: imageUrl,
-      });
+     await addDoc(productsCollection, {
+  name,
+  price,
+  description,
+  category,
+  image: imageUrl,
+});
 
       clearForm();
 
@@ -180,6 +185,8 @@ function AdminUpload() {
 
     setEditingId(product.id);
 
+    setCategory(product.category);
+    
     setName(product.name);
 
     setPrice(product.price);
@@ -217,11 +224,12 @@ function AdminUpload() {
       }
 
       const updateData = {
-        name,
-        price,
-        description,
-        image: imageUrl,
-      };
+  name,
+  price,
+  description,
+  category,
+  image: imageUrl,
+};
 
       const productDoc = doc(
         db,
@@ -235,6 +243,7 @@ function AdminUpload() {
       );
 
       clearForm();
+      
 
       fetchProducts();
 
@@ -288,15 +297,54 @@ function AdminUpload() {
 
           {/* PRICE */}
 
-          <input
-            type="text"
-            placeholder="Price"
-            value={price}
-            onChange={(e) =>
-              setPrice(e.target.value)
-            }
-            className="w-full p-4 border rounded-2xl"
-          />
+          {/* PRICE */}
+
+<input
+  type="text"
+  placeholder="Price"
+  value={price}
+  onChange={(e) =>
+    setPrice(e.target.value)
+  }
+  className="w-full p-4 border rounded-2xl"
+/>
+
+{/* CATEGORY */}
+
+<select
+  value={category}
+  onChange={(e) =>
+    setCategory(e.target.value)
+  }
+  className="w-full p-4 border rounded-2xl"
+>
+
+  <option value="">
+    Select Category
+  </option>
+
+  <option value="Laptop">
+    Laptop
+  </option>
+
+  <option value="Phone">
+    Phone
+  </option>
+
+  <option value="Monitor">
+    Monitor
+  </option>
+
+  <option value="Accessories">
+    Accessories
+  </option>
+
+  <option value="Kitchen">
+    Kitchen
+  </option>
+
+</select>
+
 
           {/* DESCRIPTION */}
 
