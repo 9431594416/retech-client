@@ -7,8 +7,8 @@ import {
 import {
   Menu,
   X,
+  ShoppingCart,
 } from "lucide-react";
-
 import {
   useCart,
 } from "../context/CartContext";
@@ -162,7 +162,37 @@ function Navbar() {
 
       )}
 
-    </nav>
+    {/* MOBILE FLOATING CART */}
+
+<Link
+  to="/cart"
+  className="md:hidden fixed bottom-6 right-6 bg-green-600 text-white p-4 rounded-full shadow-2xl z-50"
+>
+
+  <div className="relative">
+
+    <ShoppingCart size={28} />
+
+    {cartItems.length > 0 && (
+
+      <span className="absolute -top-3 -right-3 bg-black text-white text-xs w-6 h-6 flex items-center justify-center rounded-full">
+
+        {cartItems.length}
+
+      </span>
+
+    )}
+
+  </div>
+
+</Link>
+    
+    
+    
+    
+    
+    
+        </nav>
   );
 }
 
