@@ -22,6 +22,9 @@ function AdminUpload() {
 
   const [image, setImage] = useState(null);
 
+  const [previewImage, setPreviewImage] =
+    useState("");
+
   const [loading, setLoading] = useState(false);
 
   const [editingId, setEditingId] =
@@ -57,7 +60,7 @@ function AdminUpload() {
 
   }, []);
 
-  // IMAGE UPLOAD TO CLOUDINARY
+  // IMAGE UPLOAD
 
   const uploadImage = async () => {
 
@@ -84,6 +87,22 @@ function AdminUpload() {
 
   };
 
+  // CLEAR FORM
+
+  const clearForm = () => {
+
+    setName("");
+    setPrice("");
+    setDescription("");
+
+    setImage(null);
+
+    setPreviewImage("");
+
+    setEditingId(null);
+
+  };
+
   // ADD PRODUCT
 
   const addProduct = async (e) => {
@@ -96,7 +115,7 @@ function AdminUpload() {
       !description ||
       !image
     ) {
-      alert("Fill all fields");
+      alert("Please fill all fields");
       return;
     }
 
@@ -114,10 +133,7 @@ function AdminUpload() {
         image: imageUrl,
       });
 
-      setName("");
-      setPrice("");
-      setDescription("");
-      setImage(null);
+      clearForm();
 
       fetchProducts();
 
@@ -158,7 +174,7 @@ function AdminUpload() {
 
   };
 
-  // EDIT BUTTON
+  // EDIT PRODUCT
 
   const editProduct = (product) => {
 
@@ -170,6 +186,15 @@ function AdminUpload() {
 
     setDescription(product.description);
 
+    setImage(null);
+
+    setPreviewImage(product.image);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
   };
 
   // UPDATE PRODUCT
@@ -180,7 +205,9 @@ function AdminUpload() {
 
     try {
 
-      let imageUrl = null;
+      setLoading(true);
+
+      let imageUrl = previewImage;
 
       if (image) {
 
@@ -189,27 +216,25 @@ function AdminUpload() {
 
       }
 
+      const updateData = {
+        name,
+        price,
+        description,
+        image: imageUrl,
+      };
+
       const productDoc = doc(
         db,
         "products",
         editingId
       );
 
-      await updateDoc(productDoc, {
-        name,
-        price,
-        description,
-        ...(imageUrl && {
-          image: imageUrl,
-        }),
-      });
+      await updateDoc(
+        productDoc,
+        updateData
+      );
 
-      setEditingId(null);
-
-      setName("");
-      setPrice("");
-      setDescription("");
-      setImage(null);
+      clearForm();
 
       fetchProducts();
 
@@ -221,12 +246,18 @@ function AdminUpload() {
 
       alert("Update Failed");
 
+    } finally {
+
+      setLoading(false);
+
     }
 
   };
 
   return (
     <div className="min-h-screen bg-gray-100 px-6 py-12">
+
+      {/* FORM */}
 
       <div className="max-w-3xl mx-auto bg-white p-10 rounded-3xl shadow-xl">
 
@@ -243,6 +274,8 @@ function AdminUpload() {
           className="space-y-6"
         >
 
+          {/* PRODUCT NAME */}
+
           <input
             type="text"
             placeholder="Product Name"
@@ -253,6 +286,8 @@ function AdminUpload() {
             className="w-full p-4 border rounded-2xl"
           />
 
+          {/* PRICE */}
+
           <input
             type="text"
             placeholder="Price"
@@ -262,6 +297,8 @@ function AdminUpload() {
             }
             className="w-full p-4 border rounded-2xl"
           />
+
+          {/* DESCRIPTION */}
 
           <textarea
             placeholder="Description"
@@ -274,6 +311,8 @@ function AdminUpload() {
             className="w-full p-4 border rounded-2xl h-40"
           />
 
+          {/* IMAGE */}
+
           <input
             type="file"
             accept="image/*"
@@ -285,15 +324,25 @@ function AdminUpload() {
             className="w-full"
           />
 
-          {image && (
+          {/* IMAGE PREVIEW */}
+
+          {(image || previewImage) && (
+
             <img
-              src={URL.createObjectURL(
+              src={
                 image
-              )}
+                  ? URL.createObjectURL(
+                      image
+                    )
+                  : previewImage
+              }
               alt="preview"
               className="w-full h-64 object-cover rounded-2xl"
             />
+
           )}
+
+          {/* BUTTON */}
 
           <button
             type="submit"
@@ -352,7 +401,10 @@ function AdminUpload() {
 
                 <div className="flex gap-4 mt-8">
 
+                  {/* EDIT */}
+
                   <button
+                    type="button"
                     onClick={() =>
                       editProduct(product)
                     }
@@ -361,7 +413,10 @@ function AdminUpload() {
                     Edit
                   </button>
 
+                  {/* DELETE */}
+
                   <button
+                    type="button"
                     onClick={() =>
                       deleteProduct(
                         product.id

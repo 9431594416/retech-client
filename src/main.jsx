@@ -1,3 +1,4 @@
+import ProductDetails from "./pages/ProductDetails";
 import { useCart } from "./context/CartContext";
 import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
@@ -90,21 +91,28 @@ function ProductCard({
 
       <div className="overflow-hidden">
 
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-64 object-cover hover:scale-110 transition duration-500"
-        />
+       <Link to={`/product/${id}`}>
 
+  <img
+    src={image}
+    alt={title}
+    className="w-full h-64 object-cover hover:scale-110 transition duration-500"
+  />
+
+</Link>
       </div>
 
       {/* CONTENT */}
 
       <div className="p-6">
 
-        <h3 className="text-2xl font-bold text-gray-800">
-          {title}
-        </h3>
+        <Link to={`/product/${id}`}>
+
+  <h3 className="text-2xl font-bold text-gray-800 hover:text-green-600 transition">
+    {title}
+  </h3>
+
+</Link>
 
         {/* DESCRIPTION */}
 
@@ -402,6 +410,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
     <BrowserRouter>
       <Routes>
+        <Route
+  path="/product/:id"
+  element={<ProductDetails />}
+/>
         <Route
   path="/cart"
   element={<Cart />}

@@ -1,8 +1,22 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 
-import { useCart } from "../context/CartContext";
+import {
+  Link,
+} from "react-router-dom";
+
+import {
+  Menu,
+  X,
+} from "lucide-react";
+
+import {
+  useCart,
+} from "../context/CartContext";
 
 function Navbar() {
+
+  const [menuOpen, setMenuOpen] =
+    useState(false);
 
   const { cartItems } = useCart();
 
@@ -20,9 +34,9 @@ function Navbar() {
           ReTech
         </Link>
 
-        {/* NAV LINKS */}
+        {/* DESKTOP MENU */}
 
-        <div className="flex gap-8 text-lg font-semibold text-gray-700 items-center">
+        <div className="hidden md:flex gap-8 text-lg font-semibold text-gray-700 items-center">
 
           <Link
             to="/"
@@ -74,7 +88,79 @@ function Navbar() {
 
         </div>
 
+        {/* MOBILE MENU BUTTON */}
+
+        <button
+          onClick={() =>
+            setMenuOpen(!menuOpen)
+          }
+          className="md:hidden"
+        >
+
+          {menuOpen ? (
+            <X size={32} />
+          ) : (
+            <Menu size={32} />
+          )}
+
+        </button>
+
       </div>
+
+      {/* MOBILE MENU */}
+
+      {menuOpen && (
+
+        <div className="md:hidden bg-white border-t px-6 py-6 flex flex-col gap-6 text-xl font-semibold text-gray-700">
+
+          <Link
+            to="/"
+            onClick={() =>
+              setMenuOpen(false)
+            }
+          >
+            Home
+          </Link>
+
+          <Link
+            to="/products"
+            onClick={() =>
+              setMenuOpen(false)
+            }
+          >
+            Products
+          </Link>
+
+          <Link
+            to="/about"
+            onClick={() =>
+              setMenuOpen(false)
+            }
+          >
+            About
+          </Link>
+
+          <Link
+            to="/contact"
+            onClick={() =>
+              setMenuOpen(false)
+            }
+          >
+            Contact
+          </Link>
+
+          <Link
+            to="/cart"
+            onClick={() =>
+              setMenuOpen(false)
+            }
+          >
+            Cart ({cartItems.length})
+          </Link>
+
+        </div>
+
+      )}
 
     </nav>
   );
