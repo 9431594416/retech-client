@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/firebase";
+import { useNavigate } from "react-router-dom";
 
 import {
   addDoc,
@@ -14,6 +17,15 @@ import { db } from "../firebase/firebase";
 function AdminUpload() {
 
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
+
+const handleLogout = async () => {
+
+  await signOut(auth);
+
+  navigate("/login");
+
+};
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -269,6 +281,13 @@ function AdminUpload() {
       {/* FORM */}
 
       <div className="max-w-3xl mx-auto bg-white p-10 rounded-3xl shadow-xl">
+
+        <button
+  onClick={handleLogout}
+  className="bg-red-600 text-white px-4 py-2 rounded-xl"
+>
+  Logout
+</button>
 
         <h1 className="text-5xl font-extrabold text-center text-green-600 mb-10">
           Admin Dashboard
