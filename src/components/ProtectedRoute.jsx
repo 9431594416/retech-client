@@ -30,10 +30,10 @@ function ProtectedRoute({ children }) {
 
   }
 
-  return user
-    ? children
-    : <Navigate to="/login" replace />;
-
+  return user?.email ===
+  "harshkumartiwary12@gmail.com"
+  ? children
+  : <Navigate to="/login" replace />;
 }
 
 export default ProtectedRoute;
