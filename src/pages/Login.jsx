@@ -4,63 +4,101 @@ import { auth } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [password, setPassword] =
+    useState("");
+
+  const [error, setError] =
+    useState("");
 
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
+
     e.preventDefault();
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
       navigate("/admin");
+
     } catch (err) {
-      setError("Invalid email or password");
+
+      setError(
+        "Invalid email or password"
+      );
+
       console.log(err);
+
     }
+
   };
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>Admin Login</h1>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-6">
 
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{
-            display: "block",
-            marginBottom: "10px",
-            padding: "10px",
-            width: "300px",
-          }}
-        />
+      <div className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-md">
 
-        <input
-          type="password"
-          placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{
-            display: "block",
-            marginBottom: "10px",
-            padding: "10px",
-            width: "300px",
-          }}
-        />
+        <div className="text-center">
 
-        <button type="submit">Login</button>
-      </form>
+          <h1 className="text-5xl font-extrabold text-green-600">
+            ReTech
+          </h1>
 
-      {error && (
-        <p style={{ color: "red", marginTop: "10px" }}>
-          {error}
-        </p>
-      )}
+          <p className="mt-3 text-gray-500">
+            Admin Dashboard Login
+          </p>
+
+        </div>
+
+        <form
+          onSubmit={handleLogin}
+          className="mt-10 space-y-5"
+        >
+
+          <input
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
+            className="w-full border p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
+            className="w-full border p-4 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+
+          {error && (
+            <p className="text-red-500 text-sm">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-bold text-lg transition"
+          >
+            Login
+          </button>
+
+        </form>
+
+      </div>
+
     </div>
   );
 }

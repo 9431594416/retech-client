@@ -146,11 +146,11 @@ function AdminUpload() {
 
     } catch (error) {
 
-      console.log(error);
+  console.error(error);
 
-      alert("Upload Failed");
+  alert(error.message);
 
-    } finally {
+}finally {
 
       setLoading(false);
 

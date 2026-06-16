@@ -1,4 +1,7 @@
 import ProductDetails from "./pages/ProductDetails";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
+
 import { useCart } from "./context/CartContext";
 import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
@@ -22,6 +25,7 @@ import {
 import { db } from "./firebase/firebase";
 
 import AdminUpload from "./pages/AdminUpload";
+
 
 import "./index.css";
 
@@ -582,6 +586,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           path="/"
           element={<Home />}
         />
+        
 
         <Route
           path="/products"
@@ -597,11 +602,18 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           path="/contact"
           element={<Contact />}
         />
-
+<Route
+  path="/login"
+  element={<Login />}
+/>
         <Route
-          path="/admin"
-          element={<AdminUpload />}
-        />
+  path="/admin"
+  element={
+    <ProtectedRoute>
+      <AdminUpload />
+    </ProtectedRoute>
+  }
+/>
 
       </Routes>
 
