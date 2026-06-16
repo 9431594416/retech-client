@@ -1,4 +1,6 @@
 import Navbar from "../components/Navbar";
+import { db } from "../firebase/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 import axios from "axios";
 
@@ -27,7 +29,7 @@ function Cart() {
     );
 
     const options = {
-      key: rzp_test_T2E7i3iwKNgPHv,
+      key: "rzp_test_T2E7i3iwKNgPHv",
 
       amount: data.amount,
 
@@ -39,14 +41,40 @@ function Cart() {
 
       order_id: data.id,
 
-      handler: function (response) {
+      handler: async function (response) {
 
-        alert(
-          "Payment Successful\n" +
-          response.razorpay_payment_id
-        );
+  try {
 
-      },
+    await addDoc(collection(db, "orders"), {
+
+      products: cartItems,
+
+      totalAmount: totalPrice,
+
+      paymentId: response.razorpay_payment_id,
+
+      orderId: response.razorpay_order_id,
+
+      createdAt: new Date(),
+
+      status: "Paid",
+
+    });
+
+    alert(
+      "Payment Successful\n" +
+      response.razorpay_payment_id
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert("Order saved failed");
+
+  }
+
+},
 
       theme: {
         color: "#16a34a",
