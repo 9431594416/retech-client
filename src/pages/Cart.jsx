@@ -1,5 +1,7 @@
 import Navbar from "../components/Navbar";
 
+import axios from "axios";
+
 import {
   useCart,
 } from "../context/CartContext";
@@ -13,6 +15,56 @@ function Cart() {
     decreaseQuantity,
     totalPrice,
   } = useCart();
+
+  const handlePayment = async () => {
+  try {
+
+    const { data } = await axios.post(
+      "http://localhost:8000/create-order",
+      {
+        amount: totalPrice,
+      }
+    );
+
+    const options = {
+      key: rzp_test_T2E7i3iwKNgPHv,
+
+      amount: data.amount,
+
+      currency: data.currency,
+
+      name: "ReTech",
+
+      description: "Shopping Cart Payment",
+
+      order_id: data.id,
+
+      handler: function (response) {
+
+        alert(
+          "Payment Successful\n" +
+          response.razorpay_payment_id
+        );
+
+      },
+
+      theme: {
+        color: "#16a34a",
+      },
+    };
+
+    const razorpay = new window.Razorpay(options);
+
+    razorpay.open();
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert("Payment Failed");
+
+  }
+};
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -124,6 +176,13 @@ function Cart() {
               >
                 Checkout on WhatsApp
               </a>
+
+              <button
+  onClick={handlePayment}
+  className="block mt-6 bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-2xl text-xl font-bold"
+>
+  Pay Online
+</button>
 
             </div>
 
